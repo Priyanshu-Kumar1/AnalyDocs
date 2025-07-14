@@ -1,0 +1,23 @@
+/* [project]/app/auth/auth.css [app-client] (css) */
+body {
+  color: #333;
+  background-color: #fff;
+  margin: 0;
+  font-family: Arial;
+}
+
+.bg-blue {
+  color: #fff;
+  background-color: #1e88e5;
+}
+
+.text-blue {
+  color: #1e88e5;
+}
+
+.input-text-color-default {
+  --foreground: #0a0a0a;
+}
+
+
+/*# sourceMappingURL=app_auth_auth_618baa10.css.map*/

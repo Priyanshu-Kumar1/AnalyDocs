@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["file:///D:/MyCode/MainProjects/Report_generator/frontend/app/auth/auth.css"],"sourcesContent":["body {\r\n  margin: 0;\r\n  font-family: Arial;\r\n  color: #333;\r\n  background-color: #fff;\r\n}\r\n\r\n.bg-blue {\r\n    background-color: #1e88e5;\r\n    color: white;\r\n}\r\n\r\n.text-blue {\r\n    color: #1e88e5;\r\n}\r\n\r\n.input-text-color-default {\r\n    --foreground: #0a0a0a;\r\n}"],"names":[],"mappings":"AAAA;;;;;;;AAOA;;;;;AAKA;;;;AAIA","debugId":null}}]
+}

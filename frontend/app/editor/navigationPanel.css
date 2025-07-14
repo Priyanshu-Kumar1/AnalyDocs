@@ -1,0 +1,58 @@
+ul.hierarchy {
+  list-style: none;
+  padding-left: 10px;
+  margin: 0;
+  font-size: 14px;
+}
+
+ul.hierarchy li {
+  margin-bottom: 5px;
+}
+
+.outline-heading > button {
+  font-weight: bold;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #333;
+}
+
+.outline-children {
+  list-style: none;
+  padding-left: 15px;
+  border-left: 2px solid #ccc;
+  margin-top: 4px;
+  margin-bottom: 8px;
+}
+
+.outline-children li {
+  padding-left: 8px;
+  position: relative;
+}
+
+.outline-children button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #555;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  transition: background 0.2s ease;
+}
+
+.outline-children button:hover {
+  background: #f0f0f0;
+}
+
+.arrow {
+  margin-right: 5px;
+  color: #999;
+  font-size: 12px;
+}
+
+/* Selected outline */
+.element.selected {
+  outline: 2px solid #1E88E5;
+  z-index: 10;
+}

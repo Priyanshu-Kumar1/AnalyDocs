@@ -43,7 +43,7 @@ export default function EditorPage() {
 
 
   useEffect(() => {
-    setIsClient(true)  // ✅ Mark that we are on the client now
+    setIsClient(true)
 
     const chart = document.createElement('script')
     chart.src = 'https://cdn.jsdelivr.net/npm/chart.js'

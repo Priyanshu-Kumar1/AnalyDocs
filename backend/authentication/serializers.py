@@ -4,21 +4,6 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 
 class RegisterSerializer(serializers.ModelSerializer):
-    # username = serializers.CharField(
-    #     max_length=150,
-    #     required=True,
-    #     error_messages={
-    #         "required": "Username is required",
-    #         "unique": "A user with that username already exists."
-    #         }
-    #     )
-    # email = serializers.EmailField(
-    #     required=True,
-    #     error_messages={
-    #         "required": "Email is required",
-    #         "unique": "A user with that email already exists."
-    #         }
-    # )
     password = serializers.CharField(write_only=True, required=True)
 
     class Meta:

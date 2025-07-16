@@ -50,5 +50,7 @@ node_modules/
 .env*
 *.log
 __pycache__/
+.next/
 *.pyc
-
+certs/
+*.pem

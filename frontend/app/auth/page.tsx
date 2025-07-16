@@ -1,12 +1,29 @@
 'use client'
 
 import Image from 'next/image'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import './auth.css'
 
+// Declare global functions for TypeScript
+declare global {
+  interface Window {
+    login: () => Promise<void>;
+    signup: () => Promise<void>;
+  }
+}
+
 export default function AuthPage() {
   const [mode, setMode] = useState<'login' | 'signup'>('login')
+
+  useEffect(() => {
+    const auth = document.createElement('script')
+    auth.src = '/utils/auth.js'
+    auth.async = true
+    auth.defer = true
+    auth.type = 'module'
+    document.body.appendChild(auth)
+  }, [])
 
   return (
     <div className="flex h-screen">
@@ -36,20 +53,20 @@ export default function AuthPage() {
 
         {/* Forms */}
         {mode === 'login' ? (
-          <form className="flex flex-col space-y-4">
+          <form className="flex flex-col space-y-4" onSubmit={(e) => { e.preventDefault(); window.login(); }}>
             <h2 className="text-2xl font-semibold text-gray-800">Welcome Back 👋</h2>
             <input
               type="text"
               placeholder="Username"
               name='username'
-              className="p-3 border border-gray-300 rounded outline-none focus:ring-2 focus:ring-blue-500"
+              className="login-username-input p-3 border border-gray-300 rounded outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
             <input
               type="password"
               placeholder="Password"
               name='password'
-              className="p-3 border border-gray-300 rounded outline-none focus:ring-2 focus:ring-blue-500"
+              className="login-password-input p-3 border border-gray-300 rounded outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
             <button type="submit" className="bg-blue text-white py-3 rounded hover:bg-blue-700 font-semibold">
@@ -57,33 +74,34 @@ export default function AuthPage() {
             </button>
           </form>
         ) : (
-          <div className="flex flex-col space-y-4">
+          <form className="flex flex-col space-y-4" onSubmit={(e) => { e.preventDefault(); window.signup(); }}>
             <h2 className="text-2xl font-semibold text-gray-800">Create Your Account</h2>
             <input
               type="text"
               placeholder="username"
               name='username'
-              className="input-text-color-default p-3 border border-gray-300 rounded outline-none focus:ring-2 focus:ring-blue-500"
+              className="signup-username-input p-3 border border-gray-300 rounded outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
             <input
               type="email"
               placeholder="Email"
               name='email'
-              className="p-3 border border-gray-300 rounded outline-none focus:ring-2 focus:ring-blue-500"
+              className="signup-email-input p-3 border border-gray-300 rounded outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
             <input
               type="password"
               placeholder="Create Password"
               name='password'
-              className="p-3 border border-gray-300 rounded outline-none focus:ring-2 focus:ring-blue-500"
+              className="signup-password-input p-3 border border-gray-300 rounded outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
+            {/* calling signup on button click to create a new user */}
             <button type="submit" className="bg-blue text-white py-3 rounded hover:bg-blue-700 font-semibold">
               Sign Up
             </button>
-          </div>
+          </form>
         )}
       </div>
     </div>

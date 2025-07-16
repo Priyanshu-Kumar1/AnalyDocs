@@ -6,3 +6,6 @@ django-socket-server==0.0.4
 djangorestframework==3.15.2
 djangorestframework_simplejwt==5.4.0
 psycopg2-binary==2.9.10
+gunicorn
+uvicorn
+whitenoise[brotli]

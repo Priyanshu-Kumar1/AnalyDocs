@@ -1,0 +1,8 @@
+dj-database-url==3.0.1
+Django==5.0.2
+django-cors-headers==4.7.0
+django-extensions==3.2.3
+django-socket-server==0.0.4
+djangorestframework==3.15.2
+djangorestframework_simplejwt==5.4.0
+psycopg2-binary==2.9.10

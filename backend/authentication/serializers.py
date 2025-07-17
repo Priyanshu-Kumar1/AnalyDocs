@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from rest_framework_simplejwt.tokens import RefreshToken
+from .models import Project
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -51,3 +52,35 @@ class LoginSerializer(serializers.Serializer):
             'refresh': str(refresh_token),
             'access': str(refresh_token.access_token),
         }
+    
+class CreateProjectSerializer(serializers.Serializer):
+    name = serializers.CharField(max_length=255, required=True)
+    data_context = serializers.CharField(max_length=1000, required=True, allow_blank=False)
+    data_path = serializers.CharField(max_length=1000, required=True, allow_blank=False)
+    date_from = serializers.DateField(required=True, allow_null=False)
+    date_to = serializers.DateField(required=True, allow_null=False)
+
+    def validate_name(self, value):
+        if not value:
+            raise serializers.ValidationError("Project name cannot be empty")
+        return value
+
+    def validate_data_context(self, value):
+        if not value:
+            raise serializers.ValidationError("Data context cannot be empty")
+        return value
+
+    def validate_data_path(self, value):
+        if not value:
+            raise serializers.ValidationError("Data path cannot be empty")
+        return value
+
+    def validate_date_from(self, value):
+        if not value:
+            raise serializers.ValidationError("Date from cannot be empty")
+        return value
+
+    def validate_date_to(self, value):
+        if not value:
+            raise serializers.ValidationError("Date to cannot be empty")
+        return value

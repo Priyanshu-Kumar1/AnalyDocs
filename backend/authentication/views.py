@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from .serializers import RegisterSerializer, LoginSerializer
+from .serializers import RegisterSerializer, LoginSerializer, CreateProjectSerializer
 
 from .utils import format_drf_errors
 
@@ -74,3 +74,18 @@ class LoginView(APIView):
             )
             return response
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class CreateProjectView(APIView):
+    """
+    View to handle project creation.
+    """
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
+
+    def post(self, request):
+        serializer = CreateProjectSerializer(data=request.data)
+        if serializer.is_valid():
+            project = serializer.save()
+            project_data = serializer.to_representation(project)
+            return Response(project_data, status=status.HTTP_201_CREATED)
+        return Response(format_drf_errors(serializer.errors), status=status.HTTP_400_BAD_REQUEST)

@@ -1,4 +1,4 @@
-const base_url = 'https://127.0.0.1:8000/api/auth/'
+const base_url = 'https://analydocs.onrender.com/api/auth/'
 
 async function login() {
     console.log('Login function called');
@@ -29,6 +29,9 @@ async function login() {
         // Assuming the response contains a token or user data call prompt to notify the user
         const data = await response.json();
         alert(`Login successful! Welcome ${data.username}`);
+
+        // redirect to console page
+        window.location.href = '/console';
     } catch (error) {
         console.error('Login error:', error);
         alert('Login failed. Please try again.');

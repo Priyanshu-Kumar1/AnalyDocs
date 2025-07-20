@@ -28,8 +28,6 @@ jobs:
 
       - name: Manual Firebase CLI Deployment
         env:
-          # Expose the service account key as an environment variable
-          # This is securely handled by GitHub Actions secrets
           FIREBASE_SERVICE_ACCOUNT_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_ANALYDOCS }}
         run: |
           echo "Installing firebase-tools@12.9.0 globally..."
@@ -41,20 +39,25 @@ jobs:
           echo "Verifying firebase CLI version..."
           firebase --version
 
-          echo "Authenticating Firebase CLI using gcloud service account..."
+          echo "Authenticating Firebase CLI using GOOGLE_APPLICATION_CREDENTIALS..."
           # 1. Write the service account key to a temporary file
-          echo "${FIREBASE_SERVICE_ACCOUNT_KEY}" > service_account_key.json
+          #    Using /tmp/ for temporary files on Linux runners
+          echo "${FIREBASE_SERVICE_ACCOUNT_KEY}" > /tmp/service_account_key.json
 
-          # 2. Use gcloud to activate the service account.
-          #    This authenticates the environment for subsequent Firebase CLI commands.
-          #    --quiet suppresses interactive prompts.
-          gcloud auth activate-service-account --key-file=service_account_key.json --project=analydocs-test --quiet
+          # 2. Set the GOOGLE_APPLICATION_CREDENTIALS environment variable.
+          #    This is the standard way for Google Cloud client libraries (like Firebase CLI)
+          #    to automatically find service account credentials.
+          export GOOGLE_APPLICATION_CREDENTIALS="/tmp/service_account_key.json"
 
-          # 3. Clean up the temporary file immediately for security
-          rm service_account_key.json 
+          # No need for 'firebase login' or 'gcloud auth' as GOOGLE_APPLICATION_CREDENTIALS handles it
 
           echo "Changing directory to frontend/"
           cd frontend
 
           echo "Deploying frontend to Firebase Hosting..."
-          firebase deploy --only hosting:frontend --project analydocs-test
+          # We can remove --project here as it should be picked up by .firebaserc default project
+          # and the GOOGLE_APPLICATION_CREDENTIALS set for the correct project.
+          firebase deploy --only hosting:frontend 
+
+          # Clean up the temporary file immediately after deployment for security
+          rm /tmp/service_account_key.json

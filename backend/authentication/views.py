@@ -28,6 +28,7 @@ class RegisterView(APIView):
                 httponly=True,
                 secure=False,
                 samesite='None',
+                path="/",
                 max_age=60 * 60 * 24
             )
             response.set_cookie(
@@ -36,6 +37,7 @@ class RegisterView(APIView):
                 httponly=True,
                 secure=True,
                 samesite='None',
+                path="/",
                 max_age=60 * 30
             )
             response.set_cookie(
@@ -44,6 +46,7 @@ class RegisterView(APIView):
                 httponly=True,
                 secure=True,
                 samesite='None',
+                path="/",
                 max_age=60 * 60 * 24
             )
             return response
@@ -70,6 +73,7 @@ class LoginView(APIView):
                 httponly=True,
                 secure=True,
                 samesite='None',
+                path="/",
                 max_age=60 * 60 * 24
             )
             response.set_cookie(

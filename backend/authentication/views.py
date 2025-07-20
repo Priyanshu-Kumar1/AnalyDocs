@@ -34,7 +34,7 @@ class RegisterView(APIView):
                 key='access_token',
                 value=user_data['access'],
                 httponly=True,
-                secure=False,
+                secure=True,
                 samesite='None',
                 max_age=60 * 30
             )
@@ -42,7 +42,7 @@ class RegisterView(APIView):
                 key='user_id',
                 value=user_data['id'],
                 httponly=True,
-                secure=False,
+                secure=True,
                 samesite='None',
                 max_age=60 * 60 * 24
             )

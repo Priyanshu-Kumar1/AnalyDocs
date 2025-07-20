@@ -1,0 +1,39 @@
+# AnalyDocs/.github/workflows/firebase-hosting.yml
+name: Deploy Frontend to Firebase Hosting
+
+on:
+  push:
+    branches:
+      - main # Or your main branch name
+    paths:
+      - 'frontend/**' # This is the crucial part: only trigger on changes in the frontend folder
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # Use a Node.js version compatible with your Next.js app
+
+      - name: Install dependencies (frontend)
+        run: npm install
+        working-directory: frontend # Run npm install in the frontend directory
+
+      - name: Build Next.js app
+        run: npm run build # Use 'npm run build && npm run export' if you configured `output: 'export'`
+        working-directory: frontend # Run the build command in the frontend directory
+
+      - name: Deploy to Firebase Hosting
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}' # Recommended by Firebase action
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_ANALYDOCS }}' # Replace with your secret name
+          projectId: your-firebase-project-id # Replace with your Firebase project ID
+          channelId: live # Or 'staging', 'preview', etc.
+          target: frontend # This is important for monorepos, tells Firebase CLI where to look for firebase.json
+          # publicDir: frontend/out # Uncomment if the above `target` isn't sufficient for finding the public dir

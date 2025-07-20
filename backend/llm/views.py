@@ -8,10 +8,10 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from .scripts.hf_space_control import HuggingFaceSpaceManager
 
 import os
-from dotenv import load_dotenv
 
 if os.getenv("ENV") != "RENDER":
     # Load environment variables from .env file in production
+    from dotenv import load_dotenv
     load_dotenv(os.path.join(os.path.dirname(__file__), '.env'))
 
 # Just provide your Space ID here

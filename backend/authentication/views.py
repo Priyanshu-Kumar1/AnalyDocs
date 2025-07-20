@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from .serializers import RegisterSerializer, LoginSerializer, CreateProjectSerializer
+from .serializers import RegisterSerializer, LoginSerializer
 
 from .utils import format_drf_errors
 
@@ -37,6 +37,14 @@ class RegisterView(APIView):
                 secure=False,
                 samesite='None',
                 max_age=60 * 30
+            )
+            response.set_cookie(
+                key='user_id',
+                value=user_data['id'],
+                httponly=True,
+                secure=False,
+                samesite='None',
+                max_age=60 * 60 * 24
             )
             return response
         # If the serializer is not valid, return the errors with JSON
@@ -72,20 +80,26 @@ class LoginView(APIView):
                 samesite='None',
                 max_age=60 * 30
             )
+            response.set_cookie(
+                key='user_id',
+                value=user_data['id'],
+                httponly=True,
+                secure=True,
+                samesite='None',
+                max_age=60 * 60 * 24
+            )
             return response
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class CreateProjectView(APIView):
+class ClearAllUsers(APIView):
     """
-    View to handle project creation.
+    View to clear all users.
     """
     permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
 
     def post(self, request):
-        serializer = CreateProjectSerializer(data=request.data)
-        if serializer.is_valid():
-            project = serializer.save()
-            project_data = serializer.to_representation(project)
-            return Response(project_data, status=status.HTTP_201_CREATED)
-        return Response(format_drf_errors(serializer.errors), status=status.HTTP_400_BAD_REQUEST)
+        from django.contrib.auth.models import User
+        # Clear all users in the database
+        User.objects.all().delete()
+        return Response({"message": "All users have been cleared."}, status=status.HTTP_200_OK)

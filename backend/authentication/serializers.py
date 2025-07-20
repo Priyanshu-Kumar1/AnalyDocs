@@ -1,8 +1,14 @@
-from django.contrib.auth.models import User
+from .models import User
 from rest_framework import serializers
 from rest_framework_simplejwt.tokens import RefreshToken
-from .models import Project
 
+def unique_userid_generator():
+    """
+    Generates a unique user ID.
+    This function can be customized to generate unique IDs based on specific requirements.
+    """
+    import uuid
+    return str(uuid.uuid4())
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True)
@@ -13,6 +19,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user = User.objects.create_user(
+            id=unique_userid_generator(),
             username=validated_data['username'],
             email=validated_data['email'],
             password=validated_data['password'],
@@ -53,34 +60,3 @@ class LoginSerializer(serializers.Serializer):
             'access': str(refresh_token.access_token),
         }
     
-class CreateProjectSerializer(serializers.Serializer):
-    name = serializers.CharField(max_length=255, required=True)
-    data_context = serializers.CharField(max_length=1000, required=True, allow_blank=False)
-    data_path = serializers.CharField(max_length=1000, required=True, allow_blank=False)
-    date_from = serializers.DateField(required=True, allow_null=False)
-    date_to = serializers.DateField(required=True, allow_null=False)
-
-    def validate_name(self, value):
-        if not value:
-            raise serializers.ValidationError("Project name cannot be empty")
-        return value
-
-    def validate_data_context(self, value):
-        if not value:
-            raise serializers.ValidationError("Data context cannot be empty")
-        return value
-
-    def validate_data_path(self, value):
-        if not value:
-            raise serializers.ValidationError("Data path cannot be empty")
-        return value
-
-    def validate_date_from(self, value):
-        if not value:
-            raise serializers.ValidationError("Date from cannot be empty")
-        return value
-
-    def validate_date_to(self, value):
-        if not value:
-            raise serializers.ValidationError("Date to cannot be empty")
-        return value

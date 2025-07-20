@@ -1,0 +1,60 @@
+from django.contrib.auth.models import User
+from rest_framework import serializers
+from rest_framework_simplejwt.tokens import RefreshToken
+from .models import Project
+
+
+
+# generate a unique project ID
+def unique_projectid_generator(projectname):
+    """
+    Generates a unique project ID based on the project name.
+    This function can be customized to generate unique IDs based on specific requirements.
+    """
+    import uuid
+    return f"{projectname}-{str(uuid.uuid4())[:8]}"
+    
+class CreateProjectSerializer(serializers.Serializer):
+    project_id = serializers.CharField(max_length=255, required=True, default=unique_projectid_generator("MyProject"))
+    user_id = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=True)
+    name = serializers.CharField(max_length=255, required=True)
+    data_context = serializers.CharField(max_length=10000, required=True, allow_blank=False)
+    data_url = serializers.CharField(max_length=10000, required=True, allow_blank=False)
+    date_from = serializers.DateField(required=True, allow_null=False)
+    date_to = serializers.DateField(required=True, allow_null=False)
+
+    def validate_name(self, value):
+        if not value:
+            raise serializers.ValidationError("Project name cannot be empty")
+        return value
+
+    def validate_data_context(self, value):
+        if not value:
+            raise serializers.ValidationError("Data context cannot be empty")
+        return value
+
+    def validate_data_url(self, value):
+        if not value:
+            raise serializers.ValidationError("Data URL cannot be empty")
+        return value
+
+    def validate_date_from(self, value):
+        if not value:
+            raise serializers.ValidationError("Date from cannot be empty")
+        return value
+
+    def validate_date_to(self, value):
+        if not value:
+            raise serializers.ValidationError("Date to cannot be empty")
+        return value
+    
+    def create(self, validated_data):
+        project = Project.objects.create(
+            project_id=validated_data.get('project_id', unique_projectid_generator(validated_data['name'])),
+            name=validated_data['name'],
+            data_context=validated_data['data_context'],
+            data_url=validated_data['data_url'],
+            date_from=validated_data['date_from'],
+            date_to=validated_data['date_to']
+        )
+        return project

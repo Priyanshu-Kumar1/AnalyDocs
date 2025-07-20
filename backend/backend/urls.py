@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path
 from django.urls import include
-from filesystem import urls as filesystem_urls
+from projectmanager import urls as filesystem_urls
 from authentication import urls as authentication_urls
 
 

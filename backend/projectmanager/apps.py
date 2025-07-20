@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class FilesystemConfig(AppConfig):
+class ProjectManagerConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'filesystem'
+    name = 'projectmanager'

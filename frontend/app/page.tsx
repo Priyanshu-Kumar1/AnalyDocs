@@ -2,6 +2,8 @@
 
 import './index.css'
 
+import Image from 'next/image'
+
 import { useEffect, useState } from 'react'
 import { Moon, Sun } from 'react-feather'
 
@@ -26,7 +28,7 @@ export default function Home() {
     <>
       <header>
         <a href="#" className="logo">
-          <img
+          <Image
             src={isDark ? '/assets/logo-dark.svg' : '/assets/logo-light.svg'}
             id="logo"
             alt="AnalyDocs Logo"

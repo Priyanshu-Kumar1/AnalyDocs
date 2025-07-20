@@ -1,9 +1,12 @@
 'use client'
 
 import './editor.css'
+
+import Image from 'next/image'
+
 import { useEffect, useState } from 'react'
 import {
-  Type, Edit2, List, Minus, MessageSquare, Image, BarChart2, Grid, AlignLeft, AlignCenter, AlignRight, AlignJustify
+  Type, Edit2, List, Minus, MessageSquare, Image as FeatherImageico, BarChart2, Grid, AlignLeft, AlignCenter, AlignRight, AlignJustify
 } from 'react-feather'
 import { ListOrdered, Quote, Superscript, Subscript, Grid as LucideGrid, ListTree,  } from 'lucide-react'
 
@@ -93,7 +96,7 @@ export default function EditorPage() {
       
       <div id="navbar">
         <a href="#" className="logo">
-          <img src="/assets/logo-light.svg" id="logo" alt="AnalyDocs Logo" />
+          <Image src="/assets/logo-light.svg" id="logo" alt="AnalyDocs Logo" />
         </a>
         <div className='page-size'>
           Page Size:
@@ -263,8 +266,8 @@ export default function EditorPage() {
                 placeItems: 'center',
               }}
             >
-              <button title="Image" onClick={() => window.togglePanel?.('image')}>
-                <Image size={15} />
+              <button title="FeatherImageico" onClick={() => window.togglePanel?.('image')}>
+                <FeatherImageico size={15} />
               </button>
               <button title="Chart" onClick={() => window.togglePanel?.('chart')}>
                 <BarChart2 size={15} />

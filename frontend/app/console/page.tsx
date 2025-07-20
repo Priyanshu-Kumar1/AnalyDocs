@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react'
 import { Plus } from 'lucide-react'
 
+import Image from 'next/image'
+
 import './console.css'
 import { Sun, Moon } from 'react-feather'
 
@@ -53,7 +55,7 @@ export default function ProjectPage() {
       {/* Navbar */}
       <header>
         <a href="#" className="logo">
-          <img
+          <Image
             src={isDark ? '/assets/logo-dark.svg' : '/assets/logo-light.svg'}
             id="logo"
             alt="AnalyDocs Logo"

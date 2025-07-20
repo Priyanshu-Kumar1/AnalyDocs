@@ -36,7 +36,7 @@ export default function Home() {
           <a href="#features">Features</a>
           <a href="#">Pricing</a>
           <a href="#">Sign in</a>
-          <a href="console" className="cta">Get started</a>
+          <a href="auth" className="cta">Get started</a>
           <button className="dark-toggle" onClick={toggleTheme} title="Toggle Theme">
             {isDark ? <Sun /> : <Moon />}
           </button>
@@ -51,7 +51,7 @@ export default function Home() {
             an easy-to-use designer.
           </p>
           <div className="buttons">
-            <a href="console" className="primary">
+            <a href="auth" className="primary">
               Get started
             </a>
             <a href="#" className="secondary">
@@ -82,7 +82,7 @@ export default function Home() {
       <section className="call-to-action">
         <h3>Start building your first document today</h3>
         <p>Sign up now and create your first document in minutes.</p>
-        <a href="console">Get started</a>
+        <a href="auth">Get started</a>
       </section>
 
       <footer>&copy; 2025 AnalyDocs Inc. All rights reserved.</footer>

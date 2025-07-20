@@ -135,11 +135,13 @@ CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOWED_ORIGINS = [
     "https://localhost:3000",
+    "https://analydocs-test.web.app",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:3000",
-    "https://localhost:3000"
+    "https://localhost:3000",
+    "https://analydocs-test.web.app",
 ]
 
 

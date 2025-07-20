@@ -28,22 +28,30 @@ jobs:
 
       - name: Manual Firebase CLI Deployment
         env:
+          # Expose the service account key as an environment variable
+          # This is securely handled by GitHub Actions secrets
           FIREBASE_SERVICE_ACCOUNT_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_ANALYDOCS }}
         run: |
           echo "Installing firebase-tools@12.9.0 globally..."
           npm install -g firebase-tools@12.9.0
 
-          # --- ADD THESE DIAGNOSTIC LINES ---
+          # Diagnostic lines (keep for now to confirm behavior)
           echo "Verifying firebase CLI path..."
-          which firebase || command -v firebase || type firebase # Try multiple ways to find the executable path
+          which firebase || command -v firebase || type firebase
           echo "Verifying firebase CLI version..."
-          firebase --version # This should show 12.9.0
-          # --- END DIAGNOSTIC LINES ---
+          firebase --version
 
-          echo "Authenticating Firebase CLI..."
+          echo "Authenticating Firebase CLI using gcloud service account..."
+          # 1. Write the service account key to a temporary file
           echo "${FIREBASE_SERVICE_ACCOUNT_KEY}" > service_account_key.json
-          firebase login --service-account --project analydocs-test < service_account_key.json
-          rm service_account_key.json # Clean up the temporary file
+
+          # 2. Use gcloud to activate the service account.
+          #    This authenticates the environment for subsequent Firebase CLI commands.
+          #    --quiet suppresses interactive prompts.
+          gcloud auth activate-service-account --key-file=service_account_key.json --project=analydocs-test --quiet
+
+          # 3. Clean up the temporary file immediately for security
+          rm service_account_key.json 
 
           echo "Changing directory to frontend/"
           cd frontend

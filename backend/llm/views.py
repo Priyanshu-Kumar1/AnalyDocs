@@ -5,11 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
-
-from fastapi import APIRouter
 from .scripts.hf_space_control import HuggingFaceSpaceManager
-
-router = APIRouter()
 
 import os
 from dotenv import load_dotenv

@@ -6,9 +6,17 @@ import { Plus } from 'lucide-react'
 import './console.css'
 import { Sun, Moon } from 'react-feather'
 
+interface Project {
+  name: string;
+  context: string;
+  start: string;
+  end: string;
+}
+
+
 export default function ProjectPage() {
   const [showDialog, setShowDialog] = useState(false)
-  const [projects, setProjects] = useState<any[]>([])
+  const [projects, setProjects] = useState<Project[]>([])
   const [isDark, setIsDark] = useState(false)
 
   useEffect(() => {

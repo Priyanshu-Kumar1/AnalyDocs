@@ -14,7 +14,7 @@ declare global {
     updatePageSize?: () => void
     openMenu?: (menu: string) => void
     execCmd?: (cmd: string) => void
-    execCmdArg?: (cmd: string, arg: any) => void
+    execCmdArg?: (cmd: string, arg: string) => void
     toggleGridLines?: () => void
     drawRulers?: () => void
     addTextbox?: () => void
@@ -170,10 +170,10 @@ export default function EditorPage() {
               <button className='ribbon-element' onClick={() => window.execCmd?.('justify')} title="Align Justify">
                 <AlignJustify size={15} />
               </button>
-              <button className='ribbon-element' onClick={() => window.execCmdArg?.('insertUnorderedList', null)} title="Bullets">
+              <button className='ribbon-element' onClick={() => window.execCmdArg?.('insertUnorderedList', '')} title="Bullets">
                 <List size={15} />
               </button>
-              <button className='ribbon-element' onClick={() => window.execCmdArg?.('insertOrderedList', null)} title="Numbered List">
+              <button className='ribbon-element' onClick={() => window.execCmdArg?.('insertOrderedList', '')} title="Numbered List">
                 <ListOrdered size={15} />
               </button>
               <button className='ribbon-element' onClick={() => window.execCmd?.('outdent')} title="Decrease Indent">⇤</button>

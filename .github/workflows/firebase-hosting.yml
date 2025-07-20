@@ -4,7 +4,7 @@ name: Deploy Frontend to Firebase Hosting
 on:
   push:
     branches:
-      - main # Or your main branch name
+      - master # Or your main branch name
     paths:
       - 'frontend/**' # This is the crucial part: only trigger on changes in the frontend folder
 

@@ -26,19 +26,30 @@ jobs:
         run: npm run build
         working-directory: frontend
 
-      # --- ADD THIS NEW DIAGNOSTIC STEP HERE ---
-      - name: List 'out' directory contents
-        run: |
-          echo "Listing contents of frontend/out/:"
-          ls -F frontend/out/ # Using -F to indicate directories with /
-          echo "Listing all contents recursively in frontend/out/:"
-          ls -R frontend/out/ # Recursive list for full detail
-      # --- END OF NEW DIAGNOSTIC STEP ---
-
       - name: Manual Firebase CLI Deployment
         env:
-          FIREBASE_SERVICE_ACCOUNT_KEY: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_ANALYDOCS }}'
+          FIREBASE_SERVICE_ACCOUNT_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_ANALYDOCS }}
         run: |
           echo "Installing firebase-tools@12.9.0 globally..."
           npm install -g firebase-tools@12.9.0
-          # ... (rest of your deployment script) ...
+
+          # Diagnostic lines (keep for now)
+          echo "Verifying firebase CLI path..."
+          which firebase || command -v firebase || type firebase
+          echo "Verifying firebase CLI version..."
+          firebase --version
+
+          echo "Authenticating Firebase CLI using GOOGLE_APPLICATION_CREDENTIALS..."
+          echo "${FIREBASE_SERVICE_ACCOUNT_KEY}" > /tmp/service_account_key.json
+          export GOOGLE_APPLICATION_CREDENTIALS="/tmp/service_account_key.json"
+
+          echo "Changing directory to frontend/ for deployment (expecting .firebaserc copy here)..."
+          cd frontend # Change back to frontend directory
+
+          echo "Deploying frontend to Firebase Hosting..."
+          # Now running from frontend/. Both firebase.json and (hopefully) .firebaserc will be found here.
+          firebase deploy \
+            --only hosting:frontend \
+            --project analydocs-test 
+
+          rm /tmp/service_account_key.json # Clean up the temporary file

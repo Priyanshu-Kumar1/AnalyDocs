@@ -1,1 +1,15 @@
-c
+{
+  "projects": {
+    "default": "analydocs-test"
+  },
+  "targets": {
+    "analydocs-test": {
+      "hosting": {
+        "frontend": [
+          "analydocs-test"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

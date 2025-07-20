@@ -33,7 +33,7 @@ jobs:
           echo "Installing firebase-tools@12.9.0 globally..."
           npm install -g firebase-tools@12.9.0
 
-          # Diagnostic lines (keep for now to confirm behavior)
+          # Diagnostic lines
           echo "Verifying firebase CLI path..."
           which firebase || command -v firebase || type firebase
           echo "Verifying firebase CLI version..."
@@ -43,11 +43,16 @@ jobs:
           echo "${FIREBASE_SERVICE_ACCOUNT_KEY}" > /tmp/service_account_key.json
           export GOOGLE_APPLICATION_CREDENTIALS="/tmp/service_account_key.json"
 
-          echo "Changing directory to frontend/"
-          cd frontend
+          # --- REMOVE THE 'cd frontend' LINE HERE ---
+          # echo "Changing directory to frontend/"
+          # cd frontend
 
-          echo "Deploying frontend to Firebase Hosting..."
-          # --- ADD BACK --project flag HERE ---
-          firebase deploy --only hosting:frontend --project analydocs-test 
+          echo "Deploying frontend to Firebase Hosting from repository root..."
+          # Run 'firebase deploy' from the repository root, and use --config to point to firebase.json
+          firebase deploy \
+            --config frontend/firebase.json \
+            --only hosting:frontend \
+            --project analydocs-test 
 
+          # Clean up the temporary file after deployment
           rm /tmp/service_account_key.json

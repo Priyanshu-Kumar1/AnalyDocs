@@ -40,24 +40,14 @@ jobs:
           firebase --version
 
           echo "Authenticating Firebase CLI using GOOGLE_APPLICATION_CREDENTIALS..."
-          # 1. Write the service account key to a temporary file
-          #    Using /tmp/ for temporary files on Linux runners
           echo "${FIREBASE_SERVICE_ACCOUNT_KEY}" > /tmp/service_account_key.json
-
-          # 2. Set the GOOGLE_APPLICATION_CREDENTIALS environment variable.
-          #    This is the standard way for Google Cloud client libraries (like Firebase CLI)
-          #    to automatically find service account credentials.
           export GOOGLE_APPLICATION_CREDENTIALS="/tmp/service_account_key.json"
-
-          # No need for 'firebase login' or 'gcloud auth' as GOOGLE_APPLICATION_CREDENTIALS handles it
 
           echo "Changing directory to frontend/"
           cd frontend
 
           echo "Deploying frontend to Firebase Hosting..."
-          # We can remove --project here as it should be picked up by .firebaserc default project
-          # and the GOOGLE_APPLICATION_CREDENTIALS set for the correct project.
-          firebase deploy --only hosting:frontend 
+          # --- ADD BACK --project flag HERE ---
+          firebase deploy --only hosting:frontend --project analydocs-test 
 
-          # Clean up the temporary file immediately after deployment for security
           rm /tmp/service_account_key.json

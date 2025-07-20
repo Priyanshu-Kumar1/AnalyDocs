@@ -9,27 +9,11 @@
         "**/node_modules/**"
       ],
       "cleanUrls": true,
-      "rewrites": [
-      {
-        "source": "/auth",
-        "destination": "/auth.html"
-      },
-      {
-        "source": "/console",
-        "destination": "/console.html"
-      },
-      {
-        "source": "/editor",
-        "destination": "/editor.html"
-      },
-      {
-        "source": "/_next/**",
-        "destination": "/_next/**"
-      },
-      {
-        "source": "**",
-        "destination": "/404.html"
-      }
+      "rewrites":  [
+      { "source": "/auth", "destination": "/auth.html" },
+      { "source": "/console", "destination": "/console.html" },
+      { "source": "/editor", "destination": "/editor.html" },
+      { "source": "/", "destination": "/index.html" }
     ]
     }           
   ]             

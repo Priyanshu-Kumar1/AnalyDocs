@@ -35,5 +35,6 @@ jobs:
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_ANALYDOCS }}'
           projectId: analydocs-test #
           channelId: live # Or 'staging', 'preview', etc.
+          entryPoint: frontend/
           target: frontend # This is important for monorepos, tells Firebase CLI where to look for firebase.json
           # publicDir: frontend/out # Uncomment if the above `target` isn't sufficient for finding the public dir

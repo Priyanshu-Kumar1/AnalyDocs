@@ -21,7 +21,7 @@ class CreateProjectSerializer(serializers.Serializer):
     project_id = serializers.CharField(max_length=255, default=unique_projectid_generator(name))
     user_id = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=True)
     data_context = serializers.CharField(max_length=10000, required=True, allow_blank=False)
-    data_url = serializers.CharField(max_length=10000, required=False, allow_blank=False)
+    data_url = serializers.CharField(max_length=10000, default='')
     date_from = serializers.DateField(required=True, allow_null=False)
     date_to = serializers.DateField(required=True, allow_null=False)
 

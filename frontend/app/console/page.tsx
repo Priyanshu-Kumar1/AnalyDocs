@@ -157,6 +157,7 @@ export default function ProjectPage() {
                     className="w-full border px-3 py-2 rounded"
                     placeholder="e.g. Market Analysis Q2"
                     id="project-name"
+                    name='name'
                   />
                 </div>
 
@@ -167,6 +168,7 @@ export default function ProjectPage() {
                     className="w-full border px-3 py-2 rounded"
                     placeholder="Describe what the data represents..."
                     id="data-context"
+                    name='data_context'
                   />
                 </div>
 
@@ -180,11 +182,11 @@ export default function ProjectPage() {
                 <div className="flex gap-4">
                   <div className="flex-1">
                     <label className="block font-medium mb-1">From</label>
-                    <input type="date" className="w-full border px-3 py-2 rounded" id="start-date" />
+                    <input type="date" className="w-full border px-3 py-2 rounded" id="start-date" name='date_from' />
                   </div>
                   <div className="flex-1">
                     <label className="block font-medium mb-1">To</label>
-                    <input type="date" className="w-full border px-3 py-2 rounded" id="end-date" />
+                    <input type="date" className="w-full border px-3 py-2 rounded" id="end-date" name='date_to' />
                   </div>
                 </div>
               </div>

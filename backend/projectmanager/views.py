@@ -21,10 +21,12 @@ class CreateProjectView(APIView):
         """Handle POST request to create a new project.
         Validates the request data and creates a new project if valid.
         """
-        user_id = request.user.id
-        if not user_id:
-            return Response({"error": "User ID is required."}, status=status.HTTP_400_BAD_REQUEST)
-        return Response({"message": "Project creation endpoint is under construction."}, status=status.HTTP_501_NOT_IMPLEMENTED)
+
+        return Response({"message": "JWT authentication is working."}, status=status.HTTP_200_OK)
+        # user_id = request.user.id
+        # if not user_id:
+        #     return Response({"error": "User ID is required."}, status=status.HTTP_400_BAD_REQUEST)
+        # return Response({"message": "Project creation endpoint is under construction."}, status=status.HTTP_501_NOT_IMPLEMENTED)
         
         # filemanager = CloudinaryFileManager()
         # # upload a file to Cloudinary

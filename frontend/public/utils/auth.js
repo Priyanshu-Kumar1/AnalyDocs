@@ -1,4 +1,4 @@
-const base_url = 'https://analydocs.onrender.com/api/auth/'
+const base_url = 'https://analydocs.onrender.com/api/';
 
 async function login() {
     console.log('Login function called');
@@ -13,7 +13,7 @@ async function login() {
     }
 
     try {
-        const response = await fetch(base_url + 'login/', {
+        const response = await fetch(base_url + 'auth/login/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -55,7 +55,7 @@ async function signup() {
     }
 
     try {
-        const response = await fetch(base_url + 'register/', {
+        const response = await fetch(base_url + 'auth/register/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

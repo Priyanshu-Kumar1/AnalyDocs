@@ -46,3 +46,5 @@ async function createProject(data) {
         throw error; // Re-throw to propagate the error
     }
 }
+
+window.createProject = createProject;

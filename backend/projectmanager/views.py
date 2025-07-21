@@ -21,23 +21,20 @@ class CreateProjectView(APIView):
         """Handle POST request to create a new project.
         Validates the request data and creates a new project if valid.
         """
-
-        return Response({"message": "JWT authentication is working."}, status=status.HTTP_200_OK)
-        # user_id = request.user.id
-        # if not user_id:
-        #     return Response({"error": "User ID is required."}, status=status.HTTP_400_BAD_REQUEST)
-        # return Response({"message": "Project creation endpoint is under construction."}, status=status.HTTP_501_NOT_IMPLEMENTED)
         
-        # filemanager = CloudinaryFileManager()
-        # # upload a file to Cloudinary
-        # if 'file' in request.FILES:
-        #     file = request.FILES['file']
-        #     upload_response = filemanager.upload_file(user_id, file)
-        #     print("Upload Response:", upload_response)
+        user_id = request.COOKIES.get('user_id')
+        request.data['user_id'] = user_id
+        
+        filemanager = CloudinaryFileManager()
+        # upload a file to Cloudinary
+        if 'file' in request.FILES:
+            file = request.FILES['file']
+            upload_response = filemanager.upload_file(user_id, file)
+            print("Upload Response:", upload_response)
 
-        # serializer = CreateProjectSerializer(data=request.data)
-        # if serializer.is_valid():
-        #     project = serializer.save()
-        #     project_data = serializer.to_representation(project)
-        #     return Response(project_data, status=status.HTTP_201_CREATED)
-        # return Response(format_drf_errors(serializer.errors), status=status.HTTP_400_BAD_REQUEST)
+        serializer = CreateProjectSerializer(data=request.data)
+        if serializer.is_valid():
+            project = serializer.save()
+            project_data = serializer.to_representation(project)
+            return Response(project_data, status=status.HTTP_201_CREATED)
+        return Response(format_drf_errors(serializer.errors), status=status.HTTP_400_BAD_REQUEST)

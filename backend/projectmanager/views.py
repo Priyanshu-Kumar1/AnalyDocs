@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework_simplejwt.authentication import JWTAuthentication
+from authentication.customauthclass.authentication import CookieJWTAuthentication
 from .serializers import CreateProjectSerializer
 from .utils import format_drf_errors
 from .scripts.file_manager import CloudinaryFileManager
@@ -14,7 +14,7 @@ class CreateProjectView(APIView):
     View to handle project creation.
     """
     permission_classes = [IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [CookieJWTAuthentication]
 
     def post(self, request):
 

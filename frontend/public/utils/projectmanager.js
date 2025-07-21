@@ -1,11 +1,7 @@
 async function createProject(data) {
+    base_url = 'https://analydocs.onrender.com/api/';
     try {
-        const accessToken = localStorage.getItem('access_token'); // See security note above
-        if (!accessToken) {
-            throw new Error('No access token found. Please log in.');
-        }
-
-        const response = await fetch('projectmanager/create/', {
+        const response = await fetch(base_url + 'projectmanager/create/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

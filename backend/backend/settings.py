@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 import os
 from urllib.parse import urlparse, parse_qsl
 
-if os.getenv("ENV") != "Render":
+if os.getenv("ENV") != "RENDER":
     from dotenv import load_dotenv
     load_dotenv()
 

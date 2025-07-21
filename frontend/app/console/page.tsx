@@ -15,6 +15,18 @@ interface Project {
   end: string;
 }
 
+// Extend the Window interface to include createProject
+declare global {
+  interface Window {
+    createProject: (input: {
+      name: string;
+      context: string;
+      start: string;
+      end: string;
+    }) => Promise<Project>;
+  }
+}
+
 
 export default function ProjectPage() {
   const [showDialog, setShowDialog] = useState(false)
@@ -26,14 +38,12 @@ export default function ProjectPage() {
     const isDarkMode = savedTheme === 'dark'
     setIsDark(isDarkMode)
     document.documentElement.classList.toggle('dark', isDarkMode)
-  }, [])
 
-  const toggleTheme = () => {
-    const newDark = !isDark
-    setIsDark(newDark)
-    document.body.classList.toggle('dark', newDark)
-    localStorage.setItem('theme', newDark ? 'dark' : 'light')
-  }
+    const projectmanager = document.createElement('script')
+    projectmanager.src = '/utils/projectmanager.js'
+    projectmanager.async = true
+    document.body.appendChild(projectmanager)
+  }, [])
 
   const handleCreateProject = () => {
     const name = (document.getElementById('project-name') as HTMLInputElement).value.trim()
@@ -46,8 +56,24 @@ export default function ProjectPage() {
       return
     }
 
-    setProjects([...projects, { name, context, start, end }])
-    setShowDialog(false)
+    // Call the global createProject function defined in projectmanager.js
+    window.createProject({ name, context, start, end })
+      .then((newProject: Project) => {
+        setProjects(prev => [...prev, newProject])
+        setShowDialog(false)
+      })
+      .catch((error: Error) => {
+        console.error('Error creating project:', error)
+        alert('Failed to create project: ' + error.message)
+      })
+  }
+
+  function toggleTheme(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void {
+    event.preventDefault();
+    const newTheme = isDark ? 'light' : 'dark';
+    setIsDark(!isDark);
+    document.documentElement.classList.toggle('dark', !isDark);
+    localStorage.setItem('theme', newTheme);
   }
 
   return (
@@ -121,63 +147,64 @@ export default function ProjectPage() {
         <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex justify-center items-center z-50">
           <div className="bg-white w-[90%] max-w-xl rounded-lg shadow-lg p-6 relative">
             <h2 className="text-2xl font-semibold mb-4">Create New Project</h2>
-
-            <div className="space-y-4">
-              {/* Project Name */}
-              <div>
-                <label className="block font-medium mb-1">Project Name</label>
-                <input
-                  type="text"
-                  className="w-full border px-3 py-2 rounded"
-                  placeholder="e.g. Market Analysis Q2"
-                  id="project-name"
-                />
-              </div>
-
-              {/* Data Context */}
-              <div>
-                <label className="block font-medium mb-1">Data Context</label>
-                <textarea
-                  className="w-full border px-3 py-2 rounded"
-                  placeholder="Describe what the data represents..."
-                  id="data-context"
-                />
-              </div>
-
-              {/* File Upload (Drag + Drop area) */}
-              <div className="border-2 border-dashed border-gray-300 rounded-md p-6 text-center hover:bg-gray-50 cursor-pointer transition">
-                <p className="text-sm text-gray-600">Drag & drop your files here, or click to upload.</p>
-                <input type="file" id="file-upload" multiple className="hidden" />
-              </div>
-
-              {/* Time Frame */}
-              <div className="flex gap-4">
-                <div className="flex-1">
-                  <label className="block font-medium mb-1">From</label>
-                  <input type="date" className="w-full border px-3 py-2 rounded" id="start-date" />
+            <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); handleCreateProject(); }}>
+              <div className="space-y-4">
+                {/* Project Name */}
+                <div>
+                  <label className="block font-medium mb-1">Project Name</label>
+                  <input
+                    type="text"
+                    className="w-full border px-3 py-2 rounded"
+                    placeholder="e.g. Market Analysis Q2"
+                    id="project-name"
+                  />
                 </div>
-                <div className="flex-1">
-                  <label className="block font-medium mb-1">To</label>
-                  <input type="date" className="w-full border px-3 py-2 rounded" id="end-date" />
+
+                {/* Data Context */}
+                <div>
+                  <label className="block font-medium mb-1">Data Context</label>
+                  <textarea
+                    className="w-full border px-3 py-2 rounded"
+                    placeholder="Describe what the data represents..."
+                    id="data-context"
+                  />
+                </div>
+
+                {/* File Upload (Drag + Drop area) */}
+                <div className="border-2 border-dashed border-gray-300 rounded-md p-6 text-center hover:bg-gray-50 cursor-pointer transition">
+                  <p className="text-sm text-gray-600">Drag & drop your files here, or click to upload.</p>
+                  <input type="file" id="file-upload" multiple className="hidden" />
+                </div>
+
+                {/* Time Frame */}
+                <div className="flex gap-4">
+                  <div className="flex-1">
+                    <label className="block font-medium mb-1">From</label>
+                    <input type="date" className="w-full border px-3 py-2 rounded" id="start-date" />
+                  </div>
+                  <div className="flex-1">
+                    <label className="block font-medium mb-1">To</label>
+                    <input type="date" className="w-full border px-3 py-2 rounded" id="end-date" />
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* Footer Buttons */}
-            <div className="flex justify-end gap-3 mt-6">
-              <button
-                onClick={() => setShowDialog(false)}
-                className="px-4 py-2 border rounded text-gray-600 hover:bg-gray-100"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleCreateProject}
-                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-              >
-                Create
-              </button>
-            </div>
+              {/* Footer Buttons */}
+              <div className="flex justify-end gap-3 mt-6">
+                <button
+                  onClick={() => setShowDialog(false)}
+                  className="px-4 py-2 border rounded text-gray-600 hover:bg-gray-100"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                >
+                  Create
+                </button>
+              </div>
+            </form>
 
             {/* Close X */}
             <button

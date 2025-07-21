@@ -59,6 +59,8 @@ export default function ProjectPage() {
             src={isDark ? '/assets/logo-dark.svg' : '/assets/logo-light.svg'}
             id="logo"
             alt="AnalyDocs Logo"
+            width={77}
+            height={45}
           />
         </a>
         <nav>

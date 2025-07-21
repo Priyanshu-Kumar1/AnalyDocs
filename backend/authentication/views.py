@@ -29,7 +29,7 @@ class RegisterView(APIView):
                 secure=False,
                 samesite='None',
                 path="/",
-                domain='analydocs.onrender.com',
+                domain='analydocs-test.web.app',
                 max_age=60 * 60 * 24
             )
             response.set_cookie(
@@ -39,7 +39,7 @@ class RegisterView(APIView):
                 secure=True,
                 samesite='None',
                 path="/",
-                domain='analydocs.onrender.com',
+                domain='analydocs-test.web.app',
                 max_age=60 * 30
             )
             response.set_cookie(
@@ -49,7 +49,7 @@ class RegisterView(APIView):
                 secure=True,
                 samesite='None',
                 path="/",
-                domain='analydocs.onrender.com',
+                domain='analydocs-test.web.app',
                 max_age=60 * 60 * 24
             )
             return response
@@ -77,7 +77,7 @@ class LoginView(APIView):
                 secure=True,
                 samesite='None',
                 path="/",
-                domain='analydocs.onrender.com',
+                domain='analydocs-test.web.app',
                 max_age=60 * 60 * 24
             )
             response.set_cookie(
@@ -87,7 +87,7 @@ class LoginView(APIView):
                 secure=True,
                 samesite='None',
                 path="/",
-                domain='analydocs.onrender.com',
+                domain='analydocs-test.web.app',
                 max_age=60 * 30
             )
             response.set_cookie(
@@ -97,7 +97,7 @@ class LoginView(APIView):
                 secure=True,
                 samesite='None',
                 path="/",  
-                domain='analydocs.onrender.com',
+                domain='analydocs-test.web.app',
                 max_age=60 * 60 * 24
             )
             return response

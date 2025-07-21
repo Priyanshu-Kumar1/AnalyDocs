@@ -32,6 +32,8 @@ export default function Home() {
             src={isDark ? '/assets/logo-dark.svg' : '/assets/logo-light.svg'}
             id="logo"
             alt="AnalyDocs Logo"
+            width={150}
+            height={50}
           />
         </a>
         <nav>

@@ -20,9 +20,9 @@ declare global {
   interface Window {
     createProject: (input: {
       name: string;
-      context: string;
-      start: string;
-      end: string;
+      data_context: string;
+      date_from: string;
+      date_to: string;
     }) => Promise<Project>;
   }
 }
@@ -47,17 +47,17 @@ export default function ProjectPage() {
 
   const handleCreateProject = () => {
     const name = (document.getElementById('project-name') as HTMLInputElement).value.trim()
-    const context = (document.getElementById('data-context') as HTMLTextAreaElement).value.trim()
-    const start = (document.getElementById('start-date') as HTMLInputElement).value
-    const end = (document.getElementById('end-date') as HTMLInputElement).value
+    const data_context = (document.getElementById('data-context') as HTMLTextAreaElement).value.trim()
+    const date_from = (document.getElementById('start-date') as HTMLInputElement).value
+    const date_to = (document.getElementById('end-date') as HTMLInputElement).value
 
-    if (!name || !context || !start || !end) {
+    if (!name || !data_context || !date_from || !date_to) {
       alert('Please fill all fields.')
       return
     }
 
     // Call the global createProject function defined in projectmanager.js
-    window.createProject({ name, context, start, end })
+    window.createProject({ name, data_context, date_from, date_to })
       .then((newProject: Project) => {
         setProjects(prev => [...prev, newProject])
         setShowDialog(false)

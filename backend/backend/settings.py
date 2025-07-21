@@ -80,6 +80,7 @@ import os
 from urllib.parse import urlparse, parse_qsl
 
 if os.getenv("ENV") != "RENDER":
+    # Load environment variables from .env file
     from dotenv import load_dotenv
     load_dotenv()
 

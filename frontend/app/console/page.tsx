@@ -112,7 +112,7 @@ export default function ProjectPage() {
 
     // Append each selected file
     selectedFiles.forEach(file => {
-      formData.append('files', file); // 'files' should match your Django backend's field name for the file(s)
+      formData.append('file', file); // 'file' should match your Django backend's field name for the file(s)
     });
 
 

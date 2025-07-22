@@ -27,8 +27,8 @@ class CreateProjectView(APIView):
         
         filemanager = CloudinaryFileManager()
         # upload a file to Cloudinary
-        if 'files' in request.FILES:
-            file = request.FILES.get('files')[0]
+        if 'file' in request.FILES:
+            file = request.FILES.get('file')
             upload_response = filemanager.upload_file(user_id, file)
             request.data['data_url'] = upload_response
 

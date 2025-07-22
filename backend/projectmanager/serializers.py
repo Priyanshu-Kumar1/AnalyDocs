@@ -18,8 +18,7 @@ def unique_projectid_generator(projectname):
     
 class CreateProjectSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=255, required=True)
-    project_id = serializers.CharField(max_length=255, default=unique_projectid_generator(name))
-    user_id = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=True)
+    user_id = serializers.CharField(max_length=10000, required=True, allow_blank=False)
     data_context = serializers.CharField(max_length=10000, required=True, allow_blank=False)
     data_url = serializers.CharField(max_length=10000, default='')
     date_from = serializers.DateField(required=True, allow_null=False)
@@ -52,7 +51,7 @@ class CreateProjectSerializer(serializers.Serializer):
     
     def create(self, validated_data):
         project = Project.objects.create(
-            project_id=validated_data.get('project_id', unique_projectid_generator(validated_data['name'])),
+            project_id=unique_projectid_generator(validated_data['name']),
             user_id=validated_data['user_id'],
             name=validated_data['name'],
             data_context=validated_data['data_context'],

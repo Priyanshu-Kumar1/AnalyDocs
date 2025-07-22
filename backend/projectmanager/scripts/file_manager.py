@@ -24,7 +24,7 @@ class CloudinaryFileManager:
             api_secret=os.getenv("CLOUDINARY_API_SECRET")
         )
 
-    def upload_file(self, uid: str, file_path: str) -> dict:
+    def upload_file(self, uid: str, project_id: str, file_path: str) -> dict:
         """Upload a file to Cloudinary."""
         try:
             response = cloudinary.uploader.upload(
@@ -32,7 +32,7 @@ class CloudinaryFileManager:
                 resource_type="raw",
                 use_filename=True,
                 unique_filename=True,
-                folder=f"AnalyDocs/files/{uid}/"
+                folder=f"AnalyDocs/files/{uid}/ {project_id}/"
             )
             return response.get('secure_url', 'File uploaded successfully, but no URL returned.')
         except Exception as e:

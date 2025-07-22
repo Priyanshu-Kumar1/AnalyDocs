@@ -7,7 +7,18 @@ from authentication.customauthclass.authentication import CookieJWTAuthenticatio
 from .serializers import CreateProjectSerializer
 from .utils import format_drf_errors
 from .scripts.file_manager import CloudinaryFileManager
+from .models import Project
 
+
+# generate a unique project ID
+def unique_projectid_generator(projectname):
+    """
+    Generates a unique project ID based on the project name.
+    This function can be customized to generate unique IDs based on specific requirements.
+    """
+    import uuid
+    return f"{projectname}-{str(uuid.uuid4())[:8]}"
+    
 
 class CreateProjectView(APIView):
     """
@@ -24,15 +35,16 @@ class CreateProjectView(APIView):
         
         user_id = request.COOKIES.get('user_id')
         request.data['user_id'] = user_id
-        
+        project_id = unique_projectid_generator(request.data.get('name', 'default_project'))
+        request.data['project_id'] = project_id
         filemanager = CloudinaryFileManager()
         # upload a file to Cloudinary
         if 'file' in request.FILES:
             file = request.FILES.get('file')
-            upload_response = filemanager.upload_file(user_id, file)
+            upload_response = filemanager.upload_file(user_id, project_id, file)
             request.data['data_url'] = upload_response
 
-        print("request.data:", request.data)
+        
 
         serializer = CreateProjectSerializer(data=request.data)
         if serializer.is_valid():
@@ -40,3 +52,17 @@ class CreateProjectView(APIView):
             project_data = serializer.to_representation(project)
             return Response(project_data, status=status.HTTP_201_CREATED)
         return Response(format_drf_errors(serializer.errors), status=status.HTTP_400_BAD_REQUEST)
+    
+class ProjectListView(APIView):
+    """
+    View to handle listing all projects for the authenticated user.
+    """
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [CookieJWTAuthentication]
+
+    def get(self, request):
+        """Handle GET request to list all projects."""
+        user_id = request.COOKIES.get('user_id')
+        projects = Project.objects.filter(user_id=user_id).order_by('-date_from')
+        serializer = CreateProjectSerializer(projects, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

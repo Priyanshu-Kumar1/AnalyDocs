@@ -7,17 +7,10 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
-# generate a unique project ID
-def unique_projectid_generator(projectname):
-    """
-    Generates a unique project ID based on the project name.
-    This function can be customized to generate unique IDs based on specific requirements.
-    """
-    import uuid
-    return f"{projectname}-{str(uuid.uuid4())[:8]}"
-    
+
 class CreateProjectSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=255, required=True)
+    project_id = serializers.CharField(max_length=255, required=True)
     user_id = serializers.CharField(max_length=10000, required=True, allow_blank=False)
     data_context = serializers.CharField(max_length=10000, required=True, allow_blank=False)
     data_url = serializers.CharField(max_length=10000, default='')
@@ -51,7 +44,7 @@ class CreateProjectSerializer(serializers.Serializer):
     
     def create(self, validated_data):
         project = Project.objects.create(
-            project_id=unique_projectid_generator(validated_data['name']),
+            project_id=validated_data['project_id'],
             user_id=validated_data['user_id'],
             name=validated_data['name'],
             data_context=validated_data['data_context'],

@@ -32,6 +32,8 @@ class CreateProjectView(APIView):
             upload_response = filemanager.upload_file(user_id, file)
             request.data['data_url'] = upload_response
 
+        print("request.data:", request.data)
+
         serializer = CreateProjectSerializer(data=request.data)
         if serializer.is_valid():
             project = serializer.save()

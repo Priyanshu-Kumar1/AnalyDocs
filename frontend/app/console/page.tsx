@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { Plus } from 'lucide-react'
 
 import Image from 'next/image'
@@ -15,15 +15,10 @@ interface Project {
   end: string;
 }
 
-// Extend the Window interface to include createProject
+// Extend the Window interface to include createProject, now expecting FormData
 declare global {
   interface Window {
-    createProject: (input: {
-      name: string;
-      data_context: string;
-      date_from: string;
-      date_to: string;
-    }) => Promise<Project>;
+    createProject: (formData: FormData) => Promise<Project>;
   }
 }
 
@@ -32,6 +27,11 @@ export default function ProjectPage() {
   const [showDialog, setShowDialog] = useState(false)
   const [projects, setProjects] = useState<Project[]>([])
   const [isDark, setIsDark] = useState(false)
+
+  // State to hold the selected files for upload
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]); // Specify File[] type
+  // Ref for the hidden file input to programmatically trigger it
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme') || 'light'
@@ -45,26 +45,99 @@ export default function ProjectPage() {
     document.body.appendChild(projectmanager)
   }, [])
 
+  // Function to handle file selection from input
+  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setSelectedFiles(Array.from(e.target.files)); // Convert FileList to Array
+    }
+  };
+
+  // Function to trigger click on hidden file input when the div is clicked
+  const handleDragDropAreaClick = () => {
+    fileInputRef.current?.click(); // Use optional chaining in case ref is null
+  };
+
+  // NEW: Handle file drag over event
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault(); // Prevent default behavior (e.g., opening file in browser)
+    e.stopPropagation();
+    // Optional: Add visual feedback like changing border color
+    // e.currentTarget.classList.add('border-blue-500');
+  };
+
+  // NEW: Handle file drop event
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault(); // Prevent default behavior
+    e.stopPropagation();
+    // Optional: Remove visual feedback
+    // e.currentTarget.classList.remove('border-blue-500');
+
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      setSelectedFiles(Array.from(e.dataTransfer.files));
+      e.dataTransfer.clearData(); // Clear the data transfer after successful drop
+    }
+  };
+
+
   const handleCreateProject = () => {
     const name = (document.getElementById('project-name') as HTMLInputElement).value.trim()
     const data_context = (document.getElementById('data-context') as HTMLTextAreaElement).value.trim()
+    const data_file = (document.getElementById('data-file') as HTMLInputElement).value.trim()
     const date_from = (document.getElementById('start-date') as HTMLInputElement).value
     const date_to = (document.getElementById('end-date') as HTMLInputElement).value
 
-    if (!name || !data_context || !date_from || !date_to) {
-      alert('Please fill all fields.')
+    if (!name) {
+      alert('Please fill name field.')
+      return
+    }
+    if (!data_context) {
+      alert('Please fill data context field.')
+      return
+    }
+    if (!data_file) {
+      alert('Please select at least one file.')
+      return
+    }
+    if (!date_from || !date_to) {
+      alert('Please select a valid date range.')
       return
     }
 
+    // New: Create FormData object to include files
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('data_context', data_context);
+    formData.append('date_from', date_from);
+    formData.append('date_to', date_to);
+
+    // Append each selected file
+    selectedFiles.forEach(file => {
+      formData.append('files', file); // 'files' should match your Django backend's field name for the file(s)
+    });
+
+
+    // Better debugging for FormData with files
+    console.log('FormData contents:');
+    for (let [key, value] of formData.entries()) {
+      if (value instanceof File) {
+        console.log(`${key}:`, {
+          name: value.name,
+          size: value.size,
+          type: value.type,
+          lastModified: value.lastModified
+        });
+      } else {
+        console.log(`${key}:`, value);
+      }
+    }
+
     // Call the global createProject function defined in projectmanager.js
-    window.createProject({ name, data_context, date_from, date_to })
+    // Now passing FormData instead of a plain object
+    window.createProject(formData)
       .then((newProject: Project) => {
         setProjects(prev => [...prev, newProject])
         setShowDialog(false)
-      })
-      .catch((error: Error) => {
-        console.error('Error creating project:', error)
-        alert('Failed to create project: ' + error.message)
+        setSelectedFiles([]);
       })
   }
 
@@ -151,19 +224,19 @@ export default function ProjectPage() {
               <div className="space-y-4">
                 {/* Project Name */}
                 <div>
-                  <label className="block font-medium mb-1">Project Name</label>
+                  <label htmlFor="project-name" className="block font-medium mb-1">Project Name</label>
                   <input
                     type="text"
                     className="w-full border px-3 py-2 rounded"
                     placeholder="e.g. Market Analysis Q2"
                     id="project-name"
-                    name='name'
+                    name='project-name'
                   />
                 </div>
 
                 {/* Data Context */}
                 <div>
-                  <label className="block font-medium mb-1">Data Context</label>
+                  <label htmlFor="data-context" className="block font-medium mb-1">Data Context</label>
                   <textarea
                     className="w-full border px-3 py-2 rounded"
                     placeholder="Describe what the data represents..."
@@ -173,19 +246,43 @@ export default function ProjectPage() {
                 </div>
 
                 {/* File Upload (Drag + Drop area) */}
-                <div className="border-2 border-dashed border-gray-300 rounded-md p-6 text-center hover:bg-gray-50 cursor-pointer transition">
+                <div
+                  className="border-2 border-dashed border-gray-300 rounded-md p-6 text-center hover:bg-gray-50 cursor-pointer transition"
+                  onClick={handleDragDropAreaClick} // Click handler for the div
+                  onDragOver={handleDragOver} // NEW: Add drag over handler
+                  onDrop={handleDrop} // NEW: Add drop handler
+                >
                   <p className="text-sm text-gray-600">Drag & drop your files here, or click to upload.</p>
-                  <input type="file" id="file-upload" multiple className="hidden" />
+                  <input
+                    type="file"
+                    id="data-file"
+                    multiple
+                    className="hidden"
+                    ref={fileInputRef} // Assign ref to the input
+                    onChange={handleFileInputChange} // Changed function name
+                    name='files' // Add name for FormData
+                    accept=".pdf,.doc,.docx,.xls,.xlsx,.csv" // Optional: specify accepted file types
+                  />
+                  {selectedFiles.length > 0 && (
+                    <div className="mt-2 text-sm text-gray-700">
+                      <p>Selected Files:</p>
+                      <ul className="list-disc list-inside">
+                        {selectedFiles.map((file, index) => (
+                          <li key={index}>{file.name}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                 </div>
 
                 {/* Time Frame */}
                 <div className="flex gap-4">
                   <div className="flex-1">
-                    <label className="block font-medium mb-1">From</label>
+                    <label htmlFor="start-date" className="block font-medium mb-1">From</label>
                     <input type="date" className="w-full border px-3 py-2 rounded" id="start-date" name='date_from' />
                   </div>
                   <div className="flex-1">
-                    <label className="block font-medium mb-1">To</label>
+                    <label htmlFor="end-date" className="block font-medium mb-1">To</label>
                     <input type="date" className="w-full border px-3 py-2 rounded" id="end-date" name='date_to' />
                   </div>
                 </div>
@@ -194,6 +291,7 @@ export default function ProjectPage() {
               {/* Footer Buttons */}
               <div className="flex justify-end gap-3 mt-6">
                 <button
+                  type="button" // Change to type="button" to prevent form submission
                   onClick={() => setShowDialog(false)}
                   className="px-4 py-2 border rounded text-gray-600 hover:bg-gray-100"
                 >

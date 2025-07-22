@@ -53,6 +53,7 @@ class CreateProjectSerializer(serializers.Serializer):
     def create(self, validated_data):
         project = Project.objects.create(
             project_id=validated_data.get('project_id', unique_projectid_generator(validated_data['name'])),
+            user_id=validated_data['user_id'],
             name=validated_data['name'],
             data_context=validated_data['data_context'],
             data_url=validated_data['data_url'],

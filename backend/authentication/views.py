@@ -88,7 +88,7 @@ class LoginView(APIView):
                 samesite='None',
                 path="/",
                 domain='analydocs.onrender.com',
-                max_age=60 * 30
+                max_age=60 * 60 * 24
             )
             response.set_cookie(
                 key='user_id',

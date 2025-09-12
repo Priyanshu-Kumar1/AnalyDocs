@@ -19,6 +19,8 @@ interface Project {
 declare global {
   interface Window {
     createProject: (formData: FormData) => Promise<Project>;
+    // getProjects should return a Promise that gives an json to print in console
+    getProjects: () => Promise<any>;
   }
 }
 
@@ -43,6 +45,16 @@ export default function ProjectPage() {
     projectmanager.src = '/utils/projectmanager.js'
     projectmanager.async = true
     document.body.appendChild(projectmanager)
+
+    window.getProjects()
+    .then(projects => {
+      console.log('Fetched projects:', projects);
+      setProjects(projects);
+    })
+    .catch(error => {
+      console.error('Error fetching projects:', error);
+    });
+
   }, [])
 
   // Function to handle file selection from input
@@ -123,19 +135,6 @@ export default function ProjectPage() {
         setShowDialog(false)
         setSelectedFiles([]);
       })
-  }
-
-  function getProjects() {
-    // Placeholder: Fetch projects from backend API
-    fetch('https://analydocs.onrender.com/api/projectmanager/list/')
-      .then(response => response.json())
-      .then(data => {
-        console.log('Fetched projects:', data);
-        setProjects(data);
-      })
-      .catch(error => {
-        console.error('Error fetching projects:', error);
-      });
   }
 
   function toggleTheme(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void {

@@ -80,11 +80,25 @@ async function signup() {
 window.login = login;
 window.signup = signup;
 
-function getCookie(name) {
-  const cookies = document.cookie.split('; ');
-  for (let c of cookies) {
-    const [key, value] = c.split('=');
-    if (key === name) return value;
-  }
-  return null;
+window.refreshToken = async () => {
+    try {
+        const response = await fetch(base_url + 'auth/refresh/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+        });
+
+        if (!response.ok) {
+            throw new Error('Token refresh failed');
+        }
+
+        const data = await response.json();
+        alert('Token refreshed successfully');
+        return data;
+    } catch (error) {
+        console.error('Token refresh error:', error);
+        alert('Failed to refresh token. Please log in again.');
+    }
 }

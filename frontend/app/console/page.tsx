@@ -115,22 +115,6 @@ export default function ProjectPage() {
       formData.append('file', file); // 'file' should match your Django backend's field name for the file(s)
     });
 
-
-    // Better debugging for FormData with files
-    console.log('FormData contents:');
-    for (const [key, value] of formData.entries()) {
-      if (value instanceof File) {
-        console.log(`${key}:`, {
-          name: value.name,
-          size: value.size,
-          type: value.type,
-          lastModified: value.lastModified
-        });
-      } else {
-        console.log(`${key}:`, value);
-      }
-    }
-
     // Call the global createProject function defined in projectmanager.js
     // Now passing FormData instead of a plain object
     window.createProject(formData)
@@ -139,6 +123,19 @@ export default function ProjectPage() {
         setShowDialog(false)
         setSelectedFiles([]);
       })
+  }
+
+  function getProjects() {
+    // Placeholder: Fetch projects from backend API
+    fetch('https://analydocs.onrender.com/api/projectmanager/list/')
+      .then(response => response.json())
+      .then(data => {
+        console.log('Fetched projects:', data);
+        setProjects(data);
+      })
+      .catch(error => {
+        console.error('Error fetching projects:', error);
+      });
   }
 
   function toggleTheme(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void {

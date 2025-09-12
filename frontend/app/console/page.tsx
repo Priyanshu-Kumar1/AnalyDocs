@@ -46,10 +46,13 @@ export default function ProjectPage() {
     projectmanager.async = true
     document.body.appendChild(projectmanager)
 
-    // console.log all functions projectmanager has
     projectmanager.onload = () => {
-      console.log('Loaded projectmanager.js with functions:', Object.keys(window).filter(key => typeof (window as any)[key] === 'function'));
-    }
+      const functions = Object.keys(window).filter(
+        (key) => typeof window[key as keyof Window] === 'function'
+      );
+      console.log('Loaded projectmanager.js with functions:', functions);
+    };
+
 
     // window.getProjects()
     // .then(projects => {

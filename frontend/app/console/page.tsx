@@ -46,14 +46,19 @@ export default function ProjectPage() {
     projectmanager.async = true
     document.body.appendChild(projectmanager)
 
-    window.getProjects()
-    .then(projects => {
-      console.log('Fetched projects:', projects);
-      setProjects(projects);
-    })
-    .catch(error => {
-      console.error('Error fetching projects:', error);
-    });
+    // console.log all functions projectmanager has
+    projectmanager.onload = () => {
+      console.log('Loaded projectmanager.js with functions:', Object.keys(window).filter(key => typeof (window as any)[key] === 'function'));
+    }
+
+    // window.getProjects()
+    // .then(projects => {
+    //   console.log('Fetched projects:', projects);
+    //   setProjects(projects);
+    // })
+    // .catch(error => {
+    //   console.error('Error fetching projects:', error);
+    // });
 
   }, [])
 

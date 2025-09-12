@@ -20,7 +20,7 @@ declare global {
   interface Window {
     createProject: (formData: FormData) => Promise<Project>;
     // getProjects should return a Promise that gives an json to print in console
-    getProjects: () => Promise<any>;
+    getProjects: () => Promise<Project[]>;
   }
 }
 

@@ -10,9 +10,9 @@ import { Sun, Moon } from 'react-feather'
 
 interface Project {
   name: string;
-  context: string;
-  start: string;
-  end: string;
+  data_context: string;
+  date_from: string;
+  date_to: string;
 }
 
 // Extend the Window interface to include createProject, now expecting FormData
@@ -206,9 +206,9 @@ export default function ProjectPage() {
               className="border rounded-lg p-4 shadow hover:shadow-md transition w-[250px] bg-gray-50"
             >
               <h2 className="font-semibold text-lg">{proj.name}</h2>
-              <p className="text-sm text-gray-500 mb-2">{proj.context}</p>
+              <p className="text-sm text-gray-500 mb-2">{proj.data_context}</p>
               <p className="text-xs text-gray-400">
-                {proj.start} → {proj.end}
+                {proj.date_from} → {proj.date_to}
               </p>
             </div>
           ))

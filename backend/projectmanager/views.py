@@ -74,9 +74,10 @@ class SelectProjectView(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [CookieJWTAuthentication]
 
-    def get(self, request, project_id):
+    def get(self, request):
         """Handle GET request to select a project."""
         user_id = request.COOKIES.get('user_id')
+        project_id = request.query_params.get('project_id')
         try:
             project = Project.objects.get(user_id=user_id, project_id=project_id)
             serializer = CreateProjectSerializer(project)

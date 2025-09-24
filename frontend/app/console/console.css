@@ -91,6 +91,8 @@ nav a:hover {
   background: #1d4ed8;
 }
 
+.project-card
+
 .empty-state {
   display: flex;
   flex-direction: column;
@@ -147,6 +149,7 @@ nav a:hover {
 
 .project-card:hover {
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  cursor: pointer;
 }
 
 .project-card h3 {

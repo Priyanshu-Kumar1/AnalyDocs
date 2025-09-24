@@ -203,7 +203,7 @@ export default function ProjectPage() {
           projects.map((proj, i) => (
             <div
               key={i}
-              className="border rounded-lg p-4 shadow hover:shadow-md transition w-[250px] bg-gray-50"
+              className="project-card border rounded-lg p-4 shadow hover:shadow-md transition w-[250px] bg-gray-50"
             >
               <h2 className="font-semibold text-lg">{proj.name}</h2>
               <p className="text-sm text-gray-500 mb-2">{proj.data_context}</p>

@@ -9,6 +9,7 @@ import './console.css'
 import { Sun, Moon } from 'react-feather'
 
 interface Project {
+  project_id: number;
   name: string;
   data_context: string;
   date_from: string;
@@ -21,6 +22,7 @@ declare global {
     createProject: (formData: FormData) => Promise<Project>;
     // getProjects should return a Promise that gives an json to print in console
     getProjects: () => Promise<Project[]>;
+    handleProjectClick: (projectId: number) => void;
   }
 }
 
@@ -204,6 +206,7 @@ export default function ProjectPage() {
             <div
               key={i}
               className="project-card border rounded-lg p-4 shadow hover:shadow-md transition w-[250px] bg-gray-50"
+              onClick={() => window.handleProjectClick(proj.project_id)}
             >
               <h2 className="font-semibold text-lg">{proj.name}</h2>
               <p className="text-sm text-gray-500 mb-2">{proj.data_context}</p>

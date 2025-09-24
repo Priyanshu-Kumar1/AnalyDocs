@@ -43,3 +43,25 @@ window.getProjects = async () => {
     }
 
 }
+
+window.handleProjectClick = async (projectId) => {
+    try {
+        const response = await fetch(`https://analydocs.onrender.com/api/projectmanager/select?project_id=${projectId}`, {
+            method: 'GET',
+            credentials: 'include', // Important for cookies
+        });
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.detail || 'Failed to select project');
+        }
+        const data = await response.json();
+        // Redirecting to the project page
+        window.location.href = `/editor?project_id=${projectId}`;
+
+        return data;
+        
+    } catch (error) {
+        alert(`Error selecting project: ${error.message}`);
+        throw error;
+    }
+};

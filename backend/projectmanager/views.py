@@ -66,3 +66,20 @@ class ProjectListView(APIView):
         projects = Project.objects.filter(user_id=user_id).order_by('-date_from')
         serializer = CreateProjectSerializer(projects, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+class SelectProjectView(APIView):
+    """
+    View to handle selecting a project.
+    """
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [CookieJWTAuthentication]
+
+    def get(self, request, project_id):
+        """Handle GET request to select a project."""
+        user_id = request.COOKIES.get('user_id')
+        try:
+            project = Project.objects.get(user_id=user_id, project_id=project_id)
+            serializer = CreateProjectSerializer(project)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Project.DoesNotExist:
+            return Response({"detail": "Project not found."}, status=status.HTTP_404_NOT_FOUND)

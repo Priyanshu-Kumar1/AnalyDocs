@@ -83,4 +83,4 @@ class SelectProjectView(APIView):
             serializer = CreateProjectSerializer(project)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Project.DoesNotExist:
-            return Response({"detail": "Project not found."}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"detail": "Project not found.", "project_id": project_id, "user_id": user_id}, status=status.HTTP_404_NOT_FOUND)
